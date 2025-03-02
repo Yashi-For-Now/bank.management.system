@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Login extends JFrame implements ActionListener{
+    // ActionListener has an abstact class defined which you can see when you 'shift+click' it. That has to be overridden to use it in the class.
 
     JButton signin, signup, clear; // need to be defined globally so that can be accessed to add event to the buttons
     JTextField cardTextField;
@@ -80,6 +81,8 @@ public class Login extends JFrame implements ActionListener{
         } else if (ae.getSource()==signin){
 
         }else if (ae.getSource()==signup){
+            setVisible(false);
+            new SignupOne().setVisible(true); 
 
         }
 

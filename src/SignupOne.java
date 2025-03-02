@@ -2,15 +2,20 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import com.toedter.calendar.JDateChooser;
-public class SignupOne extends JFrame{
+import java.awt.event.*;
 
-    JTextField nameTextField, fnameTextField, dobTextField, genderTextField,
-    maritalSTextField, cityTextField, stateTextField, pincodeTextField,
+public class SignupOne extends JFrame implements ActionListener{
+
+    JTextField nameTextField, fnameTextField, cityTextField, stateTextField, pincodeTextField,
     emailTextField, addressTextField;
+    JButton next;
+    JRadioButton male, female, married, unmarried, other;
+    JDateChooser dateChooser;
+    long random;
     SignupOne(){
         setLayout(null);
         Random ran= new Random();
-        long random = Math.abs((ran.nextLong()% 9000L)+1000L);
+        random = Math.abs((ran.nextLong()% 9000L)+1000L);
 
         JLabel formno = new JLabel("Application form no. " + random);
         formno.setFont(new Font("Raleway", Font.BOLD, 38));
@@ -47,7 +52,9 @@ public class SignupOne extends JFrame{
         dob.setBounds(100, 240, 200, 30);
         add(dob);
 
-        JDateChooser dateChooser= new JDateChooser();
+        // jcalender jar file is required for adding the calender to date
+
+        dateChooser= new JDateChooser();
         dateChooser.setBounds(300, 240, 400, 30);
         dateChooser.setForeground(Color.black);
         add(dateChooser);
@@ -57,12 +64,12 @@ public class SignupOne extends JFrame{
         gender.setBounds(100, 290, 100, 30);
         add(gender);
 
-        JRadioButton male= new JRadioButton("Male");
+        male= new JRadioButton("Male");
         male.setBounds(300, 290, 60, 30);
         male.setBackground(Color.white);
         add(male);
 
-        JRadioButton female= new JRadioButton("Female");
+        female= new JRadioButton("Female");
         female.setBounds(450, 290, 120, 30);
         female.setBackground(Color.white);
         add(female);
@@ -86,17 +93,17 @@ public class SignupOne extends JFrame{
         maritalS.setBounds(100, 390, 150, 30);
         add(maritalS);
 
-        JRadioButton married= new JRadioButton("Married");
+        married= new JRadioButton("Married");
         married.setBounds(300, 390, 100, 30);
         married.setBackground(Color.white);
         add(married);
 
-        JRadioButton unmarried= new JRadioButton("Unmarried");
+        unmarried= new JRadioButton("Unmarried");
         unmarried.setBounds(450, 390, 120, 30);
         unmarried.setBackground(Color.white);
         add(unmarried);
 
-        JRadioButton other= new JRadioButton("Other");
+        other= new JRadioButton("Other");
         other.setBounds(630, 390, 100, 30);
         other.setBackground(Color.white);
         add(other);
@@ -146,16 +153,79 @@ public class SignupOne extends JFrame{
         pincodeTextField.setBounds(300, 590, 400, 30);
         add(pincodeTextField);
 
-        JButton next = new JButton();
+        next = new JButton("Next");
         next.setBackground(Color.black);
         next.setForeground(Color.white);
         next.setFont(new Font("Raleway", Font.BOLD, 14));
         next.setBounds(620, 620, 80, 30);
+        next.addActionListener(this);
+        add(next);
 
         getContentPane().setBackground(Color.white);
         setSize(850, 800);
         setLocation(350, 10);
         setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent ae){
+
+        String formno= "" + random; //formno through random is originally a long but we can convert it to string like shown here
+        String name= nameTextField.getText();
+        String fname= fnameTextField.getText();
+        String dob=((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
+        //for dob we first go into editor and the the ui component to get the text. The date need to be concatenated to text using JTextField because getText only works on text
+        String gender= null;
+        if(male.isSelected()){
+            gender="Male";
+        }else if(female.isSelected()){
+            gender="Female";
+        }
+        String email= emailTextField.getText();
+
+        String maritalS= null;
+        if(married.isSelected()){
+            maritalS="Married";
+        }else if(unmarried.isSelected()){
+            maritalS="Unmarried";
+        }else if(other.isSelected()){
+            maritalS="Other";
+        }
+
+        String address= addressTextField.getText();
+        String city = cityTextField.getText();
+        String state= stateTextField.getText();
+        String pincode= pincodeTextField.getText();
+
+        //using this because database is an external entity so exception handling is necessary
+        try {
+            if(name.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(fname.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(dob.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(gender.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(email.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(maritalS.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(address.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(city.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(state.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else if(pincode.equals("")){
+                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+            } else {
+                Conn c = new Conn();
+                String query = "insert into signup values('"+formno+"', '"+name+"', '"+fname+"', '"+dob+"', '"+gender+"', '"+email+"', '"+maritalS+"', '"+address+"', '"+city+"', '"+state+"', '"+pincode+"')";
+                c.s.executeUpdate(query);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void main(String args[]) {
