@@ -199,30 +199,34 @@ public class SignupOne extends JFrame implements ActionListener{
         //using this because database is an external entity so exception handling is necessary
         try {
             if(name.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Name field cannot be empty");
             } else if(fname.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Father's Name field cannot be empty");
             } else if(dob.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Date of Birth field cannot be empty");
             } else if(gender.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Gender field cannot be empty");
             } else if(email.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Email field cannot be empty");
             } else if(maritalS.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Marital Status field cannot be empty");
             } else if(address.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Address field cannot be empty");
             } else if(city.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "City field cannot be empty");
             } else if(state.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "State field cannot be empty");
             } else if(pincode.equals("")){
-                JOptionPane.showMessageDialog(null, "This field cannot be empty");
+                JOptionPane.showMessageDialog(null, "Pincode field cannot be empty");
             } else {
                 Conn c = new Conn();
                 String query = "insert into signup values('"+formno+"', '"+name+"', '"+fname+"', '"+dob+"', '"+gender+"', '"+email+"', '"+maritalS+"', '"+address+"', '"+city+"', '"+state+"', '"+pincode+"')";
                 c.s.executeUpdate(query);
+
+                setVisible(false);
+                new SignupTwo(formno).setVisible(true);
             }
+
         } catch (Exception e) {
             System.out.println(e);
         }
