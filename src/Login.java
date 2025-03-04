@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 
 public class Login extends JFrame implements ActionListener{
     // ActionListener has an abstact class defined which you can see when you 'shift+click' it. That has to be overridden to use it in the class.
@@ -13,7 +14,7 @@ public class Login extends JFrame implements ActionListener{
         setLayout(null); // Needs to be null to implement custom layout
         setTitle("Automated Teller Machine");
         ImageIcon i1= new ImageIcon(ClassLoader.getSystemResource("icons/logo.jpg"));
-        Image i2= i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT); //IMage object needs to be converted into image Icon before adding it to the frame.
+        Image i2= i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT); //Image object needs to be converted into image Icon before adding it to the frame.
         ImageIcon i3= new ImageIcon(i2);
         JLabel label = new JLabel(i3); // Jlabel is used to add any type of components to the frame.
         label.setBounds(70, 10, 100, 100); //used to layout any label
@@ -80,6 +81,22 @@ public class Login extends JFrame implements ActionListener{
             pinTextField.setText("");
         } else if (ae.getSource()==signin){
 
+            Conn conn= new Conn();
+            String cardnumber= cardTextField.getText();
+            String pinnumber= String.valueOf(pinTextField.getPassword());
+            String query= "select * from login where cardnumber='"+cardnumber+"' and pin='"+pinnumber+"'";
+
+            try {
+                ResultSet rs = conn.s.executeQuery(query);
+                if(rs.next()){
+                    setVisible(false);
+                    new Transactions(pinnumber).setVisible(true);
+                } else{
+                    JOptionPane.showMessageDialog(null,"Incorrect Card Number or Pin");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else if (ae.getSource()==signup){
             setVisible(false);
             new SignupOne().setVisible(true); 
