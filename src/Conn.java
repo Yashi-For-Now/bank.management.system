@@ -17,7 +17,7 @@ public class Conn {
         try {
             
             //Class.forName(com.mysql.cj.jdbc.Driver); //this Class class is used to register the driver
-            c= DriverManager.getConnection("jdbc:mysql:///bankmanagementsystem", "root", "mysql_082YS"); //for creating connection 
+            c= DriverManager.getConnection("jdbc:mysql:///bankmanagementsystem", "root", "password"); //for creating connection 
             //"jdbc:mysql://localhost:3306" we can write like this also but by default my sql runs on local host 3306 so we don't have to. But of this changes then we must.
             s=c.createStatement(); // for creating statement
         } catch (Exception e) {
